@@ -3,9 +3,13 @@ import ApiError from "../utils/apiError.js";
 const validate = (DtoClass) => {
   return (req, res, next) => {
     const { errors, value } = DtoClass.validate(req.body);
-    if (errors) throw new ApiError(400, errors.join(", "));
+
+    if (errors) {
+      return next(new ApiError(400, errors.join(", ")));
+    }
+
     req.body = value;
-    next();
+    return next();
   };
 };
 
